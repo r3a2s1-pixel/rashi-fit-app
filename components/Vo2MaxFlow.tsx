@@ -57,7 +57,9 @@ export default function Vo2MaxFlow() {
 
     const baseRecovery =
       1 +
-      Math.floor(Math.max(0, ints - numIntervals * (runMin + 1)) / numIntervals);
+      Math.floor(
+        Math.max(0, ints - numIntervals * (runMin + 1)) / numIntervals
+      );
 
     const list: Phase[] = [];
 

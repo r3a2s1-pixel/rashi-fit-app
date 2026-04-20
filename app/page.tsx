@@ -1,131 +1,143 @@
 "use client";
 
-import { useState } from "react";
-import { Lock, Delete, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import AppFlow from "@/components/AppFlow";
+import Vo2MaxFlow from "@/components/Vo2MaxFlow";
+import LoginScreen from "@/components/LoginScreen";
+import { Dumbbell, Timer, Sparkles } from "lucide-react";
 
-interface LoginScreenProps {
-  onSuccess: () => void;
-}
+type AppMode = "selection" | "gym" | "vo2";
 
-const CORRECT_PIN = "5810";
+export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [mode, setMode] = useState<AppMode>("selection");
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
-export default function LoginScreen({ onSuccess }: LoginScreenProps) {
-  const [pin, setPin] = useState("");
-  const [error, setError] = useState("");
-
-  const handleNumberClick = (num: string) => {
-    if (pin.length >= 4) return;
-
-    const newPin = pin + num;
-    setPin(newPin);
-    setError("");
-
-    if (newPin.length === 4) {
-      if (newPin === CORRECT_PIN) {
-        localStorage.setItem("rashi-fit-auth", "true");
-        setTimeout(() => onSuccess(), 150);
-      } else {
-        setTimeout(() => {
-          setError("Wrong PIN. Try again.");
-          setPin("");
-        }, 200);
-      }
+  useEffect(() => {
+    const savedAuth = localStorage.getItem("rashi-fit-auth");
+    if (savedAuth === "true") {
+      setIsAuthenticated(true);
     }
+    setIsCheckingAuth(false);
+  }, []);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
   };
 
-  const handleDelete = () => {
-    setPin((prev) => prev.slice(0, -1));
-    setError("");
+  const handleLogout = () => {
+    localStorage.removeItem("rashi-fit-auth");
+    setIsAuthenticated(false);
+    setMode("selection");
   };
 
-  const handleClear = () => {
-    setPin("");
-    setError("");
-  };
+  if (isCheckingAuth) {
+    return (
+      <main className="min-h-dvh bg-slate-950 flex items-center justify-center">
+        <p className="text-slate-400">Loading...</p>
+      </main>
+    );
+  }
 
-  const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  if (!isAuthenticated) {
+    return <LoginScreen onSuccess={handleLoginSuccess} />;
+  }
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-slate-950 text-white z-50 flex flex-col overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.22),_transparent_38%),radial-gradient(circle_at_center,_rgba(30,41,59,0.35),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.16),_transparent_38%),linear-gradient(to_bottom,_#020617,_#081028,_#020617)] pointer-events-none" />
+    <main className="min-h-dvh flex flex-col bg-slate-950 text-white selection:bg-orange-500/30">
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.22),_transparent_38%),radial-gradient(circle_at_center,_rgba(30,41,59,0.35),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.16),_transparent_38%),linear-gradient(to_bottom,_#020617,_#081028,_#020617)] pointer-events-none" />
 
-      <div className="relative flex-1 w-full px-4 flex flex-col items-center justify-center pt-[env(safe-area-inset-top,1rem)]">
-        <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-orange-500/20 to-orange-400/5 border border-orange-400/20 flex items-center justify-center mb-5 shadow-[0_0_30px_rgba(249,115,22,0.15)]">
-          <Lock className="text-orange-500 w-8 h-8" />
-        </div>
+      <div className="relative min-h-dvh flex flex-col">
+        <Navbar showLogout onLogout={handleLogout} />
 
-        <h1 className="text-3xl font-black tracking-tight text-white leading-tight">
-          Welcome to
-        </h1>
-        <h2 className="text-3xl font-black tracking-tight leading-tight">
-          Rash <span className="text-orange-500">Fit App</span>
-        </h2>
+        <div className="relative flex-grow w-full px-4 py-6">
+          {mode === "selection" && (
+            <div className="w-full max-w-xl mx-auto space-y-6">
+              <div className="text-center pt-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-400/20 bg-orange-500/10 text-orange-300 text-xs font-semibold mb-4">
+                  <Sparkles size={14} />
+                  Ready to train
+                </div>
 
-        <p className="text-slate-400 text-sm mt-3 max-w-[260px] text-center">
-          Enter your PIN to unlock your training dashboard
-        </p>
+                <h1 className="text-4xl font-black tracking-tight leading-tight">
+                  Choose your
+                  <br />
+                  <span className="text-orange-500">training mode</span>
+                </h1>
 
-        <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-300">
-          <ShieldCheck size={14} />
-          Private access
-        </div>
-      </div>
+                <p className="text-slate-400 text-sm mt-3 max-w-[290px] mx-auto">
+                  Pick your gym routine warmups and stretches, or start a focused
+                  VO₂ max session.
+                </p>
+              </div>
 
-      <div className="relative w-full px-4 pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]">
-        <div className="flex justify-center gap-4 mb-3">
-          {[0, 1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className={`w-3.5 h-3.5 rounded-full border-2 transition-all duration-200 ${
-                pin.length > i
-                  ? "bg-orange-500 border-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.5)]"
-                  : "border-slate-600 bg-slate-800"
-              }`}
-            />
-          ))}
-        </div>
+              <div className="grid gap-4">
+                <button
+                  onClick={() => setMode("gym")}
+                  className="w-full p-7 rounded-[2.3rem] border border-white/10 bg-slate-900/80 backdrop-blur-sm active:scale-[0.98] transition-transform text-left shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
+                >
+                  <div className="flex items-center gap-5">
+                    <div className="w-16 h-16 rounded-3xl bg-orange-500/10 border border-orange-400/20 flex items-center justify-center shrink-0">
+                      <Dumbbell className="text-orange-500 w-8 h-8" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black">Gym Routine</h2>
+                      <p className="text-slate-400 text-sm mt-1">
+                        Warmups and stretches for every training day
+                      </p>
+                    </div>
+                  </div>
+                </button>
 
-        <div className="text-center h-6 mb-4">
-          {error ? (
-            <p className="text-red-400 text-sm font-medium">{error}</p>
-          ) : (
-            <p className="text-slate-500 text-sm font-medium">PIN required</p>
+                <button
+                  onClick={() => setMode("vo2")}
+                  className="w-full p-7 rounded-[2.3rem] border border-white/10 bg-slate-900/80 backdrop-blur-sm active:scale-[0.98] transition-transform text-left shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
+                >
+                  <div className="flex items-center gap-5">
+                    <div className="w-16 h-16 rounded-3xl bg-blue-500/10 border border-blue-400/20 flex items-center justify-center shrink-0">
+                      <Timer className="text-blue-400 w-8 h-8" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black">VO₂ Max</h2>
+                      <p className="text-slate-400 text-sm mt-1">
+                        Interval training with timer and alerts
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {mode === "gym" && (
+            <div className="w-full max-w-xl mx-auto">
+              <button
+                onClick={() => setMode("selection")}
+                className="mb-6 text-slate-400 text-sm flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
+              >
+                ← Back
+              </button>
+              <AppFlow />
+            </div>
+          )}
+
+          {mode === "vo2" && (
+            <div className="w-full max-w-xl mx-auto">
+              <button
+                onClick={() => setMode("selection")}
+                className="mb-6 text-slate-400 text-sm flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
+              >
+                ← Back
+              </button>
+              <Vo2MaxFlow />
+            </div>
           )}
         </div>
 
-        <div className="grid grid-cols-3 gap-2 w-full">
-          {numbers.map((num) => (
-            <button
-              key={num}
-              onClick={() => handleNumberClick(num)}
-              className="h-[60px] rounded-2xl border border-white/10 bg-slate-800/90 text-2xl font-bold text-white active:scale-95 transition-all hover:bg-slate-700"
-            >
-              {num}
-            </button>
-          ))}
-
-          <button
-            onClick={handleClear}
-            className="h-[60px] rounded-2xl border border-white/10 bg-slate-800/90 text-sm font-bold text-slate-300 active:scale-95 transition-all hover:bg-slate-700 uppercase tracking-wider"
-          >
-            Clear
-          </button>
-
-          <button
-            onClick={() => handleNumberClick("0")}
-            className="h-[60px] rounded-2xl border border-white/10 bg-slate-800/90 text-2xl font-bold text-white active:scale-95 transition-all hover:bg-slate-700"
-          >
-            0
-          </button>
-
-          <button
-            onClick={handleDelete}
-            className="h-[60px] rounded-2xl border border-white/10 bg-slate-800/90 flex items-center justify-center text-slate-300 active:scale-95 transition-all hover:bg-slate-700"
-          >
-            <Delete className="w-6 h-6" />
-          </button>
-        </div>
+        <Footer />
       </div>
-    </div>
+    </main>
   );
 }
