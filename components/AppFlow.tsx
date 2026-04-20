@@ -18,9 +18,8 @@ export default function AppFlow() {
   const [step, setStep] = useState<Step>(1);
   const [selectedDay, setSelectedDay] = useState<WorkoutDay | null>(null);
   const [selectedType, setSelectedType] = useState<WorkoutType>(null);
-  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
-    null
-  );
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
+  const [selectedExerciseIndex, setSelectedExerciseIndex] = useState<number>(0);
 
   const goBack = () => {
     if (step === 2) {
@@ -45,13 +44,32 @@ export default function AppFlow() {
     setStep(3);
   };
 
-  const handleExerciseSelect = (exercise: Exercise) => {
+  const getCurrentExerciseList = () => {
+    if (!selectedDay || !selectedType) return [];
+    return selectedType === "warmup" ? selectedDay.warmups : selectedDay.stretches;
+  };
+
+  const handleExerciseSelect = (exercise: Exercise, index: number) => {
     setSelectedExercise(exercise);
+    setSelectedExerciseIndex(index);
     setStep(4);
   };
 
+  const handleDoneNext = () => {
+    const currentList = getCurrentExerciseList();
+
+    if (selectedExerciseIndex < currentList.length - 1) {
+      const nextIndex = selectedExerciseIndex + 1;
+      setSelectedExercise(currentList[nextIndex]);
+      setSelectedExerciseIndex(nextIndex);
+    } else {
+      setStep(3);
+      setSelectedExercise(null);
+    }
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]">
       <AnimatePresence mode="wait">
         {step === 1 && (
           <motion.div
@@ -178,13 +196,10 @@ export default function AppFlow() {
             </div>
 
             <div className="space-y-3">
-              {(selectedType === "warmup"
-                ? selectedDay.warmups
-                : selectedDay.stretches
-              ).map((exercise) => (
+              {getCurrentExerciseList().map((exercise, index) => (
                 <button
                   key={exercise.id}
-                  onClick={() => handleExerciseSelect(exercise)}
+                  onClick={() => handleExerciseSelect(exercise, index)}
                   className="w-full flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-900/80 border border-white/10 active:scale-[0.98] transition-all text-left"
                 >
                   <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-800 shrink-0 border border-white/10">
@@ -269,10 +284,13 @@ export default function AppFlow() {
                 </div>
 
                 <button
-                  onClick={goBack}
+                  onClick={handleDoneNext}
                   className="w-full mt-6 py-4 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
                 >
-                  <CheckCircle2 size={20} /> Done
+                  <CheckCircle2 size={20} />
+                  {selectedExerciseIndex < getCurrentExerciseList().length - 1
+                    ? "Next Exercise"
+                    : "Done"}
                 </button>
               </div>
             </div>

@@ -160,7 +160,7 @@ export default function Vo2MaxFlow() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]">
       {screen === "setup" ? (
         <div className="w-full max-w-xl mx-auto space-y-4">
           <div className="rounded-[2rem] border border-white/10 bg-slate-900/75 backdrop-blur-md p-6 shadow-[0_18px_50px_rgba(0,0,0,0.32)]">

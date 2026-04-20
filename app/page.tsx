@@ -54,7 +54,7 @@ export default function Home() {
 
         <div className="relative flex-grow w-full px-4 py-6">
           {mode === "selection" && (
-            <div className="w-full max-w-xl mx-auto space-y-6">
+            <div className="w-full space-y-6">
               <div className="text-center pt-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-400/20 bg-orange-500/10 text-orange-300 text-xs font-semibold mb-4">
                   <Sparkles size={14} />
@@ -111,29 +111,9 @@ export default function Home() {
             </div>
           )}
 
-          {mode === "gym" && (
-            <div className="w-full max-w-xl mx-auto">
-              <button
-                onClick={() => setMode("selection")}
-                className="mb-6 text-slate-400 text-sm flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
-              >
-                ← Back
-              </button>
-              <AppFlow />
-            </div>
-          )}
+          {mode === "gym" && <AppFlow />}
 
-          {mode === "vo2" && (
-            <div className="w-full max-w-xl mx-auto">
-              <button
-                onClick={() => setMode("selection")}
-                className="mb-6 text-slate-400 text-sm flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
-              >
-                ← Back
-              </button>
-              <Vo2MaxFlow />
-            </div>
-          )}
+          {mode === "vo2" && <Vo2MaxFlow />}
         </div>
 
         <Footer />
