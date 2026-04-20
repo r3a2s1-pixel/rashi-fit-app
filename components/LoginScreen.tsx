@@ -46,11 +46,11 @@ export default function LoginScreen({ onSuccess }: LoginScreenProps) {
   const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
   return (
-    <div className="h-[100dvh] w-full bg-slate-950 text-white relative overflow-hidden flex flex-col">
+    <div className="fixed inset-0 w-full h-full bg-slate-950 text-white z-50 flex flex-col overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_35%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.12),_transparent_30%)] pointer-events-none" />
 
-      {/* Top Section: Flex-1 pushes the keypad to the bottom but scales to fit small screens */}
-      <div className="relative flex-1 w-full px-4 flex flex-col items-center justify-center pt-6">
+      {/* Top Section: Flex-1 scales to fit, with padding for the top notch */}
+      <div className="relative flex-1 w-full px-4 flex flex-col items-center justify-center pt-[env(safe-area-inset-top,1rem)]">
         <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-orange-500/20 to-orange-400/5 border border-orange-400/20 flex items-center justify-center mb-5 shadow-[0_0_30px_rgba(249,115,22,0.15)]">
           <Lock className="text-orange-500 w-8 h-8" />
         </div>
@@ -72,11 +72,8 @@ export default function LoginScreen({ onSuccess }: LoginScreenProps) {
         </div>
       </div>
 
-      {/* Bottom Section: Keypad optimized for Safari safe areas */}
-      <div 
-        className="relative w-full px-4" 
-        style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
-      >
+      {/* Bottom Section: Keypad area with padding for the bottom home indicator */}
+      <div className="relative w-full px-4 pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]">
         <div className="flex justify-center gap-4 mb-3">
           {[0, 1, 2, 3].map((i) => (
             <div
