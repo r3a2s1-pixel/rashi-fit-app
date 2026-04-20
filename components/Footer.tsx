@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-md mx-auto px-4 flex flex-col items-center gap-3">
         <div className="flex items-center gap-2 text-slate-400">
           <Dumbbell size={16} className="text-orange-500" />
-          <span className="font-semibold">Rashi Fit App</span>
+          <span className="font-semibold">Rash Fit App</span>
         </div>
         <p className="text-slate-600 text-xs text-center">
           Built for your gym routine, recovery, and VO₂ max training

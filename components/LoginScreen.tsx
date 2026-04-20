@@ -22,7 +22,7 @@ export default function LoginScreen({ onSuccess }: LoginScreenProps) {
 
     if (newPin.length === 4) {
       if (newPin === CORRECT_PIN) {
-        localStorage.setItem("rashi-fit-auth", "true");
+        localStorage.setItem("Rash-fit-auth", "true");
         setTimeout(() => {
           onSuccess();
         }, 150);
@@ -62,7 +62,7 @@ export default function LoginScreen({ onSuccess }: LoginScreenProps) {
               Welcome to
             </h1>
             <h2 className="text-3xl font-black tracking-tight mt-1">
-              Rashi <span className="text-orange-500">Fit App</span>
+              Rash <span className="text-orange-500">Fit App</span>
             </h2>
 
             <p className="text-slate-400 text-sm mt-3 max-w-[240px]">

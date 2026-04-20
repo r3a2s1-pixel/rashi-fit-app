@@ -16,7 +16,7 @@ export default function Home() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   useEffect(() => {
-    const savedAuth = localStorage.getItem("rashi-fit-auth");
+    const savedAuth = localStorage.getItem("ashi-fit-auth");
     if (savedAuth === "true") {
       setIsAuthenticated(true);
     }
@@ -28,7 +28,7 @@ export default function Home() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("rashi-fit-auth");
+    localStorage.removeItem("Rash-fit-auth");
     setIsAuthenticated(false);
     setMode("selection");
   };

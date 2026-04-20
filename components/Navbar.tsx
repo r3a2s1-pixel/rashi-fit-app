@@ -20,7 +20,7 @@ export default function Navbar({
           </div>
           <div className="leading-tight">
             <p className="text-white font-black text-lg tracking-tight">
-              Rashi <span className="text-orange-500">Fit</span>
+              Rash <span className="text-orange-500">Fit</span>
             </p>
             <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
               Personal Training
