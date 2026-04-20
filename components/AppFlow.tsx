@@ -26,12 +26,10 @@ export default function AppFlow() {
     if (step === 2) {
       setStep(1);
       setSelectedDay(null);
-    }
-    if (step === 3) {
+    } else if (step === 3) {
       setStep(2);
       setSelectedType(null);
-    }
-    if (step === 4) {
+    } else if (step === 4) {
       setStep(3);
       setSelectedExercise(null);
     }
@@ -47,13 +45,13 @@ export default function AppFlow() {
     setStep(3);
   };
 
-  const handleExerciseSelect = (ex: Exercise) => {
-    setSelectedExercise(ex);
+  const handleExerciseSelect = (exercise: Exercise) => {
+    setSelectedExercise(exercise);
     setStep(4);
   };
 
   return (
-    <div className="w-full max-w-md mx-auto min-h-[60vh]">
+    <div className="w-full">
       <AnimatePresence mode="wait">
         {step === 1 && (
           <motion.div
@@ -61,17 +59,17 @@ export default function AppFlow() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
-            className="space-y-4"
+            className="w-full space-y-4"
           >
             <div className="mb-6">
-              <p className="text-orange-400 text-xs font-semibold uppercase tracking-[0.25em] mb-2">
+              <p className="text-orange-400 text-xs font-semibold uppercase tracking-[0.2em] mb-2">
                 Gym plan
               </p>
               <h2 className="text-3xl font-black tracking-tight">
                 Select your workout day
               </h2>
               <p className="text-slate-400 text-sm mt-2">
-                Choose the muscle focus you want to train today
+                Choose the muscle group you want to focus on today
               </p>
             </div>
 
@@ -80,19 +78,20 @@ export default function AppFlow() {
                 <button
                   key={day.dayNumber}
                   onClick={() => handleDaySelect(day)}
-                  className="w-full flex items-center justify-between p-5 rounded-[1.6rem] border border-white/10 bg-slate-900/85 shadow-lg active:scale-[0.98] transition-all text-left hover:border-orange-400/30"
+                  className="w-full flex items-center justify-between p-5 rounded-[1.8rem] border border-white/10 bg-slate-900/80 backdrop-blur-sm active:scale-[0.98] transition-all text-left shadow-[0_16px_40px_rgba(0,0,0,0.22)]"
                 >
                   <div>
-                    <span className="text-orange-400 text-[11px] font-bold uppercase tracking-[0.2em]">
+                    <span className="text-orange-400 text-[11px] font-black uppercase tracking-[0.2em]">
                       Day {day.dayNumber}
                     </span>
-                    <h3 className="text-xl font-black text-white mt-1">
+                    <h3 className="text-2xl font-black text-white mt-1">
                       {day.title}
                     </h3>
                     <p className="text-slate-400 text-sm mt-1">
                       {day.muscleGroup}
                     </p>
                   </div>
+
                   <ChevronRight className="text-slate-500" />
                 </button>
               ))}
@@ -106,11 +105,11 @@ export default function AppFlow() {
             initial={{ opacity: 0, x: 18 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -18 }}
-            className="space-y-6"
+            className="w-full space-y-5"
           >
             <button
               onClick={goBack}
-              className="inline-flex items-center gap-2 text-slate-400 text-sm px-3 py-2 rounded-xl bg-slate-900/70 border border-white/10"
+              className="inline-flex items-center gap-2 text-slate-400 text-sm px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
             >
               <ChevronLeft size={18} /> Back
             </button>
@@ -121,17 +120,17 @@ export default function AppFlow() {
               </p>
               <h2 className="text-3xl font-black">{selectedDay.title}</h2>
               <p className="text-slate-400 text-sm mt-2">
-                Choose what you want to do first
+                Choose what you want to do before or after your workout
               </p>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
               <button
                 onClick={() => handleTypeSelect("warmup")}
-                className="overflow-hidden p-7 rounded-[2rem] bg-gradient-to-br from-orange-600 to-orange-400 text-white shadow-[0_18px_50px_rgba(249,115,22,0.28)] active:scale-95 transition-transform text-left"
+                className="w-full p-7 rounded-[2rem] bg-gradient-to-br from-orange-600 to-orange-400 text-white shadow-[0_20px_50px_rgba(249,115,22,0.25)] active:scale-95 transition-transform text-left"
               >
                 <Flame className="mb-5 w-10 h-10" />
-                <span className="text-2xl font-black block">Warmup</span>
+                <span className="text-3xl font-black block">Warmup</span>
                 <span className="text-orange-100 text-sm mt-2 block">
                   {selectedDay.warmups.length} exercises before training
                 </span>
@@ -139,12 +138,12 @@ export default function AppFlow() {
 
               <button
                 onClick={() => handleTypeSelect("stretch")}
-                className="overflow-hidden p-7 rounded-[2rem] bg-gradient-to-br from-blue-600 to-blue-400 text-white shadow-[0_18px_50px_rgba(59,130,246,0.28)] active:scale-95 transition-transform text-left"
+                className="w-full p-7 rounded-[2rem] bg-gradient-to-br from-blue-600 to-blue-400 text-white shadow-[0_20px_50px_rgba(59,130,246,0.25)] active:scale-95 transition-transform text-left"
               >
                 <Activity className="mb-5 w-10 h-10" />
-                <span className="text-2xl font-black block">Stretch</span>
+                <span className="text-3xl font-black block">Stretch</span>
                 <span className="text-blue-100 text-sm mt-2 block">
-                  {selectedDay.stretches.length} recovery exercises after training
+                  {selectedDay.stretches.length} exercises after training
                 </span>
               </button>
             </div>
@@ -157,11 +156,11 @@ export default function AppFlow() {
             initial={{ opacity: 0, x: 18 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -18 }}
-            className="space-y-4"
+            className="w-full space-y-4"
           >
             <button
               onClick={goBack}
-              className="inline-flex items-center gap-2 text-slate-400 text-sm px-3 py-2 rounded-xl bg-slate-900/70 border border-white/10"
+              className="inline-flex items-center gap-2 text-slate-400 text-sm px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
             >
               <ChevronLeft size={18} /> Back
             </button>
@@ -174,7 +173,7 @@ export default function AppFlow() {
                 {selectedType} list
               </h2>
               <p className="text-slate-400 text-sm mt-2">
-                Tap any exercise to see details and image
+                Tap any exercise to view the image and details
               </p>
             </div>
 
@@ -182,30 +181,30 @@ export default function AppFlow() {
               {(selectedType === "warmup"
                 ? selectedDay.warmups
                 : selectedDay.stretches
-              ).map((ex) => (
+              ).map((exercise) => (
                 <button
-                  key={ex.id}
-                  onClick={() => handleExerciseSelect(ex)}
-                  className="w-full flex items-center gap-4 p-3 rounded-[1.5rem] bg-slate-900/85 border border-white/10 active:scale-[0.98] transition-all text-left hover:border-orange-400/20"
+                  key={exercise.id}
+                  onClick={() => handleExerciseSelect(exercise)}
+                  className="w-full flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-900/80 border border-white/10 active:scale-[0.98] transition-all text-left"
                 >
                   <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-800 shrink-0 border border-white/10">
                     <img
-                      src={ex.image}
-                      alt={ex.name}
+                      src={exercise.image}
+                      alt={exercise.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
 
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <h4 className="font-bold text-white text-lg leading-tight">
-                      {ex.name}
+                      {exercise.name}
                     </h4>
                     <p className="text-orange-400 text-sm font-semibold mt-1">
-                      {ex.reps_or_time}
+                      {exercise.reps_or_time}
                     </p>
                   </div>
 
-                  <ChevronRight className="text-slate-500" size={18} />
+                  <ChevronRight className="text-slate-500 shrink-0" size={18} />
                 </button>
               ))}
             </div>
@@ -218,17 +217,17 @@ export default function AppFlow() {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
-            className="space-y-6"
+            className="w-full space-y-5 pb-6"
           >
             <button
               onClick={goBack}
-              className="inline-flex items-center gap-2 text-slate-400 text-sm px-3 py-2 rounded-xl bg-slate-900/70 border border-white/10"
+              className="inline-flex items-center gap-2 text-slate-400 text-sm px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
             >
               <ChevronLeft size={18} /> Back
             </button>
 
-            <div className="rounded-[2.2rem] overflow-hidden border border-white/10 bg-slate-900/90 shadow-[0_20px_70px_rgba(0,0,0,0.4)]">
-              <div className="w-full aspect-video bg-slate-800">
+            <div className="rounded-[2.2rem] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_22px_60px_rgba(0,0,0,0.32)]">
+              <div className="w-full aspect-[4/3] bg-slate-800">
                 <img
                   src={selectedExercise.image}
                   alt={selectedExercise.name}
@@ -236,7 +235,7 @@ export default function AppFlow() {
                 />
               </div>
 
-              <div className="p-7">
+              <div className="p-6">
                 <p className="text-orange-400 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
                   Exercise detail
                 </p>
@@ -245,11 +244,11 @@ export default function AppFlow() {
                   {selectedExercise.name}
                 </h2>
 
-                <p className="text-slate-400 mb-7 leading-relaxed">
+                <p className="text-slate-400 mb-6 leading-relaxed">
                   {selectedExercise.description}
                 </p>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="bg-slate-800/70 p-4 rounded-2xl border border-white/5">
                     <span className="text-slate-500 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em]">
                       Target
@@ -271,7 +270,7 @@ export default function AppFlow() {
 
                 <button
                   onClick={goBack}
-                  className="w-full mt-7 py-4 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                  className="w-full mt-6 py-4 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
                 >
                   <CheckCircle2 size={20} /> Done
                 </button>
