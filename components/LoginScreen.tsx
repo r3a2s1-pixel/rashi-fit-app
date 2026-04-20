@@ -47,7 +47,7 @@ export default function LoginScreen({ onSuccess }: LoginScreenProps) {
 
   return (
     <div className="fixed inset-0 w-full h-full bg-slate-950 text-white z-50 flex flex-col overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_35%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.12),_transparent_30%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.24),_transparent_35%),radial-gradient(circle_at_50%_45%,_rgba(15,23,42,0.45),_transparent_50%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.18),_transparent_35%),linear-gradient(180deg,_#020617_0%,_#081226_45%,_#030712_100%)] pointer-events-none" />
 
       {/* Top Section: Flex-1 scales to fit, with padding for the top notch */}
       <div className="relative flex-1 w-full px-4 flex flex-col items-center justify-center pt-[env(safe-area-inset-top,1rem)]">
