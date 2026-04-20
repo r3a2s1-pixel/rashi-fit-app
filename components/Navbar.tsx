@@ -19,6 +19,7 @@ export default function Navbar({ showLogout, onLogout }: NavbarProps) {
             Rash<span className="text-orange-500">Fit</span>
           </span>
         </div>
+
         {showLogout && (
           <button
             onClick={onLogout}
