@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:rrot{
   color-scheme: dark;
 }
 
-html,
+HTML,
 body {
   background-color: #020617;
   color: #ffffff;
@@ -14,11 +14,9 @@ body {
   overscroll-behavior-y: none;
   -webkit-tap-highlight-color: transparent;
   width: 100%;
-  min-height: 100dvh;
+  min-height: 100dvh%;
   margin: 0;
   padding: 0;
 }
-
-* {
-  box-sizing: border-box;
+*{box-sizing: border-box;
 }
