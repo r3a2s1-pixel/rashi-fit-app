@@ -19,7 +19,7 @@ export default function AppFlow() {
   const [selectedDay, setSelectedDay] = useState<WorkoutDay | null>(null);
   const [selectedType, setSelectedType] = useState<WorkoutType>(null);
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
-  const [selectedExerciseIndex, setSelectedExerciseIndex] = useState<number>(0);
+  const [selectedExerciseIndex, setSelectedExerciseIndex] = useState(0);
 
   const goBack = () => {
     if (step === 2) {
@@ -99,10 +99,7 @@ export default function AppFlow() {
                   className="w-full flex items-center justify-between p-5 rounded-[1.8rem] border border-white/10 bg-slate-900/80 backdrop-blur-sm active:scale-[0.98] transition-all text-left shadow-[0_16px_40px_rgba(0,0,0,0.22)]"
                 >
                   <div>
-                    <span className="text-orange-400 text-[11px] font-black uppercase tracking-[0.2em]">
-                      Day {day.dayNumber}
-                    </span>
-                    <h3 className="text-2xl font-black text-white mt-1">
+                    <h3 className="text-2xl font-black text-white">
                       {day.title}
                     </h3>
                     <p className="text-slate-400 text-sm mt-1">
@@ -251,8 +248,12 @@ export default function AppFlow() {
               </div>
 
               <div className="p-6">
-                <p className="text-orange-400 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+                <p className="text-orange-400 text-xs font-semibold uppercase tracking-[0.2em] mb-2">
                   Exercise detail
+                </p>
+
+                <p className="text-slate-400 text-sm mb-3">
+                  Exercise {selectedExerciseIndex + 1} of {getCurrentExerciseList().length}
                 </p>
 
                 <h2 className="text-3xl font-black mb-3">

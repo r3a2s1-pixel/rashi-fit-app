@@ -25,7 +25,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-950 text-white overscroll-none`}>
+      <body
+        className={`${inter.className} bg-slate-950 text-white overscroll-none`}
+      >
         {children}
       </body>
     </html>
