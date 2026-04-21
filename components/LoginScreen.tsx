@@ -46,10 +46,10 @@ export default function LoginScreen({ onSuccess }: LoginScreenProps) {
   const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-slate-950 text-white z-50 flex flex-col overflow-hidden">
+    <div className="fixed inset-0 w-full h-[100dvh] bg-slate-950 text-white z-50 flex flex-col overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.22),_transparent_38%),radial-gradient(circle_at_center,_rgba(30,41,59,0.35),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.16),_transparent_38%),linear-gradient(to_bottom,_#020617,_#081028,_#020617)] pointer-events-none" />
 
-      <div className="relative flex-1 w-full px-4 flex flex-col items-center justify-center pt-[env(safe-area-inset-top,1rem)]">
+      <div className="relative flex-1 w-full px-4 flex flex-col items-center justify-center pt-[env(safe-area-inset-top,2rem)]">
         <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-orange-500/20 to-orange-400/5 border border-orange-400/20 flex items-center justify-center mb-5 shadow-[0_0_30px_rgba(249,115,22,0.15)]">
           <Lock className="text-orange-500 w-8 h-8" />
         </div>
@@ -71,7 +71,7 @@ export default function LoginScreen({ onSuccess }: LoginScreenProps) {
         </div>
       </div>
 
-      <div className="relative w-full px-4 pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]">
+      <div className="relative w-full px-4 pb-[max(1.5rem,env(safe-area-inset-bottom,2rem))]">
         <div className="flex justify-center gap-4 mb-3">
           {[0, 1, 2, 3].map((i) => (
             <div
@@ -98,7 +98,7 @@ export default function LoginScreen({ onSuccess }: LoginScreenProps) {
             <button
               key={num}
               onClick={() => handleNumberClick(num)}
-              className="h-[60px] rounded-2xl border border-white/10 bg-slate-800/90 text-2xl font-bold text-white active:scale-95 transition-all hover:bg-slate-700"
+              className="h-[65px] rounded-2xl border border-white/10 bg-slate-800/90 text-2xl font-bold text-white active:scale-95 transition-all hover:bg-slate-700"
             >
               {num}
             </button>
@@ -106,21 +106,21 @@ export default function LoginScreen({ onSuccess }: LoginScreenProps) {
 
           <button
             onClick={handleClear}
-            className="h-[60px] rounded-2xl border border-white/10 bg-slate-800/90 text-sm font-bold text-slate-300 active:scale-95 transition-all hover:bg-slate-700 uppercase tracking-wider"
+            className="h-[65px] rounded-2xl border border-white/10 bg-slate-800/90 text-sm font-bold text-slate-300 active:scale-95 transition-all hover:bg-slate-700 uppercase tracking-wider"
           >
             Clear
           </button>
 
           <button
             onClick={() => handleNumberClick("0")}
-            className="h-[60px] rounded-2xl border border-white/10 bg-slate-800/90 text-2xl font-bold text-white active:scale-95 transition-all hover:bg-slate-700"
+            className="h-[65px] rounded-2xl border border-white/10 bg-slate-800/90 text-2xl font-bold text-white active:scale-95 transition-all hover:bg-slate-700"
           >
             0
           </button>
 
           <button
             onClick={handleDelete}
-            className="h-[60px] rounded-2xl border border-white/10 bg-slate-800/90 flex items-center justify-center text-slate-300 active:scale-95 transition-all hover:bg-slate-700"
+            className="h-[65px] rounded-2xl border border-white/10 bg-slate-800/90 flex items-center justify-center text-slate-300 active:scale-95 transition-all hover:bg-slate-700"
           >
             <Delete className="w-6 h-6" />
           </button>

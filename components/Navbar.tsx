@@ -9,7 +9,7 @@ interface NavbarProps {
 
 export default function Navbar({ showLogout, onLogout }: NavbarProps) {
   return (
-    <header className="sticky top-0 z-50 w-full bg-slate-950/80 backdrop-blur-md border-b border-white/5">
+    <header className="sticky top-0 z-50 w-full bg-slate-950/80 backdrop-blur-md border-b border-white/5 pt-[env(safe-area-inset-top,0px)]">
       <div className="w-full px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-orange-500/10 flex items-center justify-center">
