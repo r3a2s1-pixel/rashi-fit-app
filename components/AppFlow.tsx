@@ -101,7 +101,7 @@ export default function AppFlow() {
                 <button
                   key={day.dayNumber}
                   onClick={() => handleDaySelect(day)}
-                  className="w-full flex items-center justify-between p-5 rounded-[1.8rem] border border-white/10 bg-slate-900/80 backdrop-blur-sm active:scale-[0.98] transition-all text-left shadow-[0_16px_40px_rgba(0,0,0,0.22)]"
+                  className="w-full flex items-center justify-between p-5 rounded-3xl border border-white/10 bg-slate-900/80 backdrop-blur-sm active:scale-[0.98] transition-all text-left shadow-[0_16px_40px_rgba(0,0,0,0.22)]"
                 >
                   <div>
                     <h3 className="text-2xl font-black text-white">
@@ -147,7 +147,7 @@ export default function AppFlow() {
             <div className="grid grid-cols-1 gap-4">
               <button
                 onClick={() => handleTypeSelect("warmup")}
-                className="w-full p-7 rounded-[2rem] bg-gradient-to-br from-orange-600 to-orange-400 text-white shadow-[0_20px_50px_rgba(249,115,22,0.25)] active:scale-95 transition-transform text-left"
+                className="w-full p-7 rounded-4xl bg-linear-to-br from-orange-600 to-orange-400 text-white shadow-[0_20px_50px_rgba(249,115,22,0.25)] active:scale-95 transition-transform text-left"
               >
                 <Flame className="mb-5 w-10 h-10" />
                 <span className="text-3xl font-black block">Warmup</span>
@@ -158,7 +158,7 @@ export default function AppFlow() {
 
               <button
                 onClick={() => handleTypeSelect("stretch")}
-                className="w-full p-7 rounded-[2rem] bg-gradient-to-br from-blue-600 to-blue-400 text-white shadow-[0_20px_50px_rgba(59,130,246,0.25)] active:scale-95 transition-transform text-left"
+                className="w-full p-7 rounded-4xl bg-linear-to-br from-blue-600 to-blue-400 text-white shadow-[0_20px_50px_rgba(59,130,246,0.25)] active:scale-95 transition-transform text-left"
               >
                 <Activity className="mb-5 w-10 h-10" />
                 <span className="text-3xl font-black block">Stretch</span>
@@ -202,7 +202,7 @@ export default function AppFlow() {
                 <button
                   key={exercise.id}
                   onClick={() => handleExerciseSelect(exercise, index)}
-                  className="w-full flex items-center gap-4 p-4 rounded-[1.5rem] bg-slate-900/80 border border-white/10 active:scale-[0.98] transition-all text-left"
+                  className="w-full flex items-center gap-4 p-4 rounded-3xl bg-slate-900/80 border border-white/10 active:scale-[0.98] transition-all text-left"
                 >
                   <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-800 shrink-0 border border-white/10">
                     <img
@@ -243,8 +243,8 @@ export default function AppFlow() {
               <ChevronLeft size={18} /> Back
             </button>
 
-            <div className="rounded-[2.2rem] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_22px_60px_rgba(0,0,0,0.32)] flex flex-col">
-              <div className="w-full aspect-[4/3] bg-slate-800 shrink-0">
+            <div className="rounded-[36px] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_22px_60px_rgba(0,0,0,0.32)] flex flex-col">
+              <div className="w-full aspect-4/3 bg-slate-800 shrink-0">
                 <img
                   src={selectedExercise.image}
                   alt={selectedExercise.name}
@@ -275,7 +275,7 @@ export default function AppFlow() {
                     <span className="text-slate-500 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em] shrink-0">
                       Target
                     </span>
-                    <span className="font-bold text-white text-base leading-tight break-words">
+                    <span className="font-bold text-white text-base leading-tight wrap-break-word">
                       {selectedExercise.target_muscle}
                     </span>
                   </div>
@@ -284,7 +284,7 @@ export default function AppFlow() {
                     <span className="text-orange-400 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em] shrink-0">
                       Time / Reps
                     </span>
-                    <span className="font-bold text-orange-400 text-base leading-tight break-words">
+                    <span className="font-bold text-orange-400 text-base leading-tight wrap-break-word">
                       {selectedExercise.reps_or_time}
                     </span>
                   </div>
