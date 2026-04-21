@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: "Rash Fit App",
   description: "Personal Gym & VO2 Max Tracker",
   applicationName: "Rash Fit App",
+  icons: {
+    icon: "/icon.png?v=2",
+    apple: "/apple-icon.png?v=2",
+    shortcut: "/favicon.ico?v=2",
+  },
   appleWebApp: {
     capable: true,
     title: "Rash Fit",
