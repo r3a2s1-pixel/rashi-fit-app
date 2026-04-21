@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Rash Fit App v3",
+  title: "Rash Fit App",
   description: "Personal Gym & VO2 Max Tracker",
   applicationName: "Rash Fit App",
   appleWebApp: {
@@ -33,10 +33,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="bg-[#020617]">
-      <body
-        className={`${inter.className} bg-slate-950 text-white overscroll-none min-h-[100dvh]`}
-      >
+    <html lang="en" className="bg-slate-950">
+      <body className={`${inter.className} bg-slate-950 text-white min-h-screen`}>
         {children}
       </body>
     </html>

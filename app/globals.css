@@ -2,21 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:rrot{
-  color-scheme: dark;
-}
-
-HTML,
+html,
 body {
-  background-color: #020617;
-  color: #ffffff;
-  overscroll-behavior: none;
-  overscroll-behavior-y: none;
-  -webkit-tap-highlight-color: transparent;
-  width: 100%;
-  min-height: 100dvh;
   margin: 0;
   padding: 0;
-}
-*{box-sizing: border-box;
 }
