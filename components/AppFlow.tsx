@@ -18,8 +18,11 @@ export default function AppFlow() {
   const [step, setStep] = useState<Step>(1);
   const [selectedDay, setSelectedDay] = useState<WorkoutDay | null>(null);
   const [selectedType, setSelectedType] = useState<WorkoutType>(null);
-  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
-  const [selectedExerciseIndex, setSelectedExerciseIndex] = useState<number>(0);
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
+    null
+  );
+  const [selectedExerciseIndex, setSelectedExerciseIndex] =
+    useState<number>(0);
 
   const goBack = () => {
     if (step === 2) {
@@ -46,7 +49,9 @@ export default function AppFlow() {
 
   const getCurrentExerciseList = () => {
     if (!selectedDay || !selectedType) return [];
-    return selectedType === "warmup" ? selectedDay.warmups : selectedDay.stretches;
+    return selectedType === "warmup"
+      ? selectedDay.warmups
+      : selectedDay.stretches;
   };
 
   const handleExerciseSelect = (exercise: Exercise, index: number) => {
@@ -253,7 +258,8 @@ export default function AppFlow() {
                 </p>
 
                 <p className="text-slate-400 text-sm mb-3">
-                  Exercise {selectedExerciseIndex + 1} of {getCurrentExerciseList().length}
+                  Exercise {selectedExerciseIndex + 1} of{" "}
+                  {getCurrentExerciseList().length}
                 </p>
 
                 <h2 className="text-3xl font-black mb-3">
