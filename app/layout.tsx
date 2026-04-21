@@ -7,6 +7,11 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Rash Fit App",
   description: "Personal Gym & VO2 Max Tracker",
+  appleWebApp: {
+    capable: true,
+    title: "Rash Fit",
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export const viewport: Viewport = {
@@ -24,10 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.className} bg-slate-950 text-white overscroll-none`}
-      >
+    <html lang="en" className="bg-[#020617]">
+      <body className={`${inter.className} bg-slate-950 text-white overscroll-none`}>
         {children}
       </body>
     </html>
