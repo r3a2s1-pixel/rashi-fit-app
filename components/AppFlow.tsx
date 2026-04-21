@@ -19,7 +19,7 @@ export default function AppFlow() {
   const [selectedDay, setSelectedDay] = useState<WorkoutDay | null>(null);
   const [selectedType, setSelectedType] = useState<WorkoutType>(null);
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
-  const [selectedExerciseIndex, setSelectedExerciseIndex] = useState(0);
+  const [selectedExerciseIndex, setSelectedExerciseIndex] = useState<number>(0);
 
   const goBack = () => {
     if (step === 2) {
@@ -238,8 +238,8 @@ export default function AppFlow() {
               <ChevronLeft size={18} /> Back
             </button>
 
-            <div className="rounded-[2.2rem] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_22px_60px_rgba(0,0,0,0.32)]">
-              <div className="w-full aspect-[4/3] bg-slate-800">
+            <div className="rounded-[2.2rem] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_22px_60px_rgba(0,0,0,0.32)] flex flex-col">
+              <div className="w-full aspect-[4/3] bg-slate-800 shrink-0">
                 <img
                   src={selectedExercise.image}
                   alt={selectedExercise.name}
@@ -247,7 +247,7 @@ export default function AppFlow() {
                 />
               </div>
 
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-1">
                 <p className="text-orange-400 text-xs font-semibold uppercase tracking-[0.2em] mb-2">
                   Exercise detail
                 </p>
@@ -264,21 +264,21 @@ export default function AppFlow() {
                   {selectedExercise.description}
                 </p>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-slate-800/70 p-4 rounded-2xl border border-white/5">
-                    <span className="text-slate-500 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em]">
+                <div className="grid grid-cols-2 gap-3 mt-6">
+                  <div className="bg-slate-800/70 p-4 rounded-2xl border border-white/5 flex flex-col justify-center h-full">
+                    <span className="text-slate-500 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em] shrink-0">
                       Target
                     </span>
-                    <span className="font-bold text-white">
+                    <span className="font-bold text-white text-base leading-tight break-words">
                       {selectedExercise.target_muscle}
                     </span>
                   </div>
 
-                  <div className="bg-orange-500/10 p-4 rounded-2xl border border-orange-500/20">
-                    <span className="text-orange-400 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em]">
+                  <div className="bg-orange-500/10 p-4 rounded-2xl border border-orange-500/20 flex flex-col justify-center h-full">
+                    <span className="text-orange-400 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em] shrink-0">
                       Time / Reps
                     </span>
-                    <span className="font-bold text-orange-400 text-lg">
+                    <span className="font-bold text-orange-400 text-base leading-tight break-words">
                       {selectedExercise.reps_or_time}
                     </span>
                   </div>
@@ -286,7 +286,7 @@ export default function AppFlow() {
 
                 <button
                   onClick={handleDoneNext}
-                  className="w-full mt-6 py-4 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                  className="w-full mt-auto pt-6 py-4 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
                 >
                   <CheckCircle2 size={20} />
                   {selectedExerciseIndex < getCurrentExerciseList().length - 1
