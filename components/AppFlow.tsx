@@ -234,7 +234,7 @@ export default function AppFlow() {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
-            className="w-full space-y-5 pb-6"
+            className="w-full space-y-4 pb-4"
           >
             <button
               onClick={goBack}
@@ -252,25 +252,25 @@ export default function AppFlow() {
                 />
               </div>
 
-              <div className="p-6 flex flex-col flex-1">
+              <div className="p-5 flex flex-col">
                 <p className="text-orange-400 text-xs font-semibold uppercase tracking-[0.2em] mb-2">
                   Exercise detail
                 </p>
 
-                <p className="text-slate-400 text-sm mb-3">
+                <p className="text-slate-400 text-sm mb-2">
                   Exercise {selectedExerciseIndex + 1} of{" "}
                   {getCurrentExerciseList().length}
                 </p>
 
-                <h2 className="text-3xl font-black mb-3">
+                <h2 className="text-3xl font-black mb-2">
                   {selectedExercise.name}
                 </h2>
 
-                <p className="text-slate-400 mb-6 leading-relaxed">
+                <p className="text-slate-400 mb-4 leading-relaxed">
                   {selectedExercise.description}
                 </p>
 
-                <div className="grid grid-cols-2 gap-3 mt-6">
+                <div className="grid grid-cols-2 gap-3 mt-3">
                   <div className="bg-slate-800/70 p-4 rounded-2xl border border-white/5 flex flex-col justify-center h-full">
                     <span className="text-slate-500 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em] shrink-0">
                       Target
@@ -292,7 +292,7 @@ export default function AppFlow() {
 
                 <button
                   onClick={handleDoneNext}
-                  className="w-full mt-auto pt-6 py-4 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                  className="w-full mt-4 py-4 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
                 >
                   <CheckCircle2 size={20} />
                   {selectedExerciseIndex < getCurrentExerciseList().length - 1
