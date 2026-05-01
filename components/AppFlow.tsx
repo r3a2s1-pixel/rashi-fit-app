@@ -49,6 +49,7 @@ export default function AppFlow() {
 
   const getCurrentExerciseList = () => {
     if (!selectedDay || !selectedType) return [];
+
     return selectedType === "warmup"
       ? selectedDay.warmups
       : selectedDay.stretches;
@@ -234,17 +235,17 @@ export default function AppFlow() {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
-            className="w-full space-y-4 pb-4"
+            className="w-full space-y-3 pb-3"
           >
             <button
               onClick={goBack}
-              className="inline-flex items-center gap-2 text-slate-400 text-sm px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
+              className="inline-flex items-center gap-2 text-slate-400 text-sm px-4 py-1.5 rounded-2xl bg-slate-900/50 border border-white/5"
             >
               <ChevronLeft size={18} /> Back
             </button>
 
-            <div className="rounded-[36px] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_22px_60px_rgba(0,0,0,0.32)] flex flex-col">
-              <div className="w-full aspect-4/3 bg-slate-800 shrink-0">
+            <div className="rounded-[30px] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_22px_60px_rgba(0,0,0,0.32)] flex flex-col">
+              <div className="w-full h-[230px] max-h-[32vh] bg-slate-800 shrink-0">
                 <img
                   src={selectedExercise.image}
                   alt={selectedExercise.name}
@@ -252,27 +253,27 @@ export default function AppFlow() {
                 />
               </div>
 
-              <div className="p-5 flex flex-col">
-                <p className="text-orange-400 text-xs font-semibold uppercase tracking-[0.2em] mb-2">
+              <div className="p-4 flex flex-col">
+                <p className="text-orange-400 text-[10px] font-semibold uppercase tracking-[0.2em] mb-1">
                   Exercise detail
                 </p>
 
-                <p className="text-slate-400 text-sm mb-2">
+                <p className="text-slate-400 text-xs mb-1">
                   Exercise {selectedExerciseIndex + 1} of{" "}
                   {getCurrentExerciseList().length}
                 </p>
 
-                <h2 className="text-3xl font-black mb-2">
+                <h2 className="text-2xl font-black mb-1 leading-tight">
                   {selectedExercise.name}
                 </h2>
 
-                <p className="text-slate-400 mb-4 leading-relaxed">
+                <p className="text-slate-400 text-sm mb-3 leading-snug">
                   {selectedExercise.description}
                 </p>
 
-                <div className="grid grid-cols-2 gap-3 mt-3">
-                  <div className="bg-slate-800/70 p-4 rounded-2xl border border-white/5 flex flex-col justify-center h-full">
-                    <span className="text-slate-500 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em] shrink-0">
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <div className="bg-slate-800/70 p-3 rounded-2xl border border-white/5 flex flex-col justify-center min-h-[88px]">
+                    <span className="text-slate-500 text-[9px] uppercase font-bold block mb-1 tracking-[0.15em] shrink-0">
                       Target
                     </span>
                     <span className="font-bold text-white text-base leading-tight wrap-break-word">
@@ -280,8 +281,8 @@ export default function AppFlow() {
                     </span>
                   </div>
 
-                  <div className="bg-orange-500/10 p-4 rounded-2xl border border-orange-500/20 flex flex-col justify-center h-full">
-                    <span className="text-orange-400 text-[10px] uppercase font-bold block mb-1 tracking-[0.15em] shrink-0">
+                  <div className="bg-orange-500/10 p-3 rounded-2xl border border-orange-500/20 flex flex-col justify-center min-h-[88px]">
+                    <span className="text-orange-400 text-[9px] uppercase font-bold block mb-1 tracking-[0.15em] shrink-0">
                       Time / Reps
                     </span>
                     <span className="font-bold text-orange-400 text-base leading-tight wrap-break-word">
@@ -292,7 +293,7 @@ export default function AppFlow() {
 
                 <button
                   onClick={handleDoneNext}
-                  className="w-full mt-4 py-4 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                  className="w-full mt-3 py-3.5 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
                 >
                   <CheckCircle2 size={20} />
                   {selectedExerciseIndex < getCurrentExerciseList().length - 1
