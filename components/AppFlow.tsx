@@ -244,8 +244,8 @@ export default function AppFlow() {
               <ChevronLeft size={16} /> Back
             </button>
 
-            <div className="rounded-[26px] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_18px_50px_rgba(0,0,0,0.28)] flex flex-col">
-              <div className="w-full h-[250px] max-h-[38vh] bg-white shrink-0">
+            <div className="rounded-[26px] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_18px_50px_rgba(0,0,0,0.28)] flex flex-col h-[calc(100svh-220px)] max-h-[calc(100svh-220px)]">
+              <div className="w-full flex-1 min-h-[190px] bg-white shrink overflow-hidden">
                 <img
                   src={selectedExercise.image}
                   alt={selectedExercise.name}
@@ -253,7 +253,7 @@ export default function AppFlow() {
                 />
               </div>
 
-              <div className="p-3.5 flex flex-col">
+              <div className="p-3.5 flex flex-col shrink-0">
                 <p className="text-orange-400 text-[9px] font-semibold uppercase tracking-[0.18em] mb-1">
                   Exercise detail
                 </p>
@@ -263,11 +263,11 @@ export default function AppFlow() {
                   {getCurrentExerciseList().length}
                 </p>
 
-                <h2 className="text-[26px] font-black mb-1 leading-[1.05]">
+                <h2 className="text-[24px] font-black mb-1 leading-[1.05] line-clamp-2">
                   {selectedExercise.name}
                 </h2>
 
-                <p className="text-slate-400 text-sm mb-2 leading-snug">
+                <p className="text-slate-400 text-sm mb-2 leading-snug line-clamp-2">
                   {selectedExercise.description}
                 </p>
 
