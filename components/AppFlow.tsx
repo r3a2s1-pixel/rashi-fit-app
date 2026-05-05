@@ -235,17 +235,24 @@ export default function AppFlow() {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
-            className="w-full space-y-2 pb-0"
+            style={{
+              position: "fixed",
+              top: "136px",
+              bottom: "max(0px, env(safe-area-inset-bottom, 0px))",
+              left: "1rem",
+              right: "1rem",
+            }}
+            className="z-40 flex flex-col"
           >
             <button
               onClick={goBack}
-              className="inline-flex items-center gap-2 text-slate-400 text-xs px-3 py-1.5 rounded-2xl bg-slate-900/50 border border-white/5"
+              className="inline-flex items-center gap-2 text-slate-400 text-xs px-3 py-1.5 rounded-2xl bg-slate-900/50 border border-white/5 self-start mb-2 shrink-0"
             >
               <ChevronLeft size={16} /> Back
             </button>
 
-            <div className="rounded-[26px] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_18px_50px_rgba(0,0,0,0.28)] flex flex-col h-[calc(100svh-220px)] max-h-[calc(100svh-220px)]">
-              <div className="w-full flex-1 min-h-[190px] bg-white shrink overflow-hidden">
+            <div className="flex-1 min-h-0 rounded-[26px] overflow-hidden border border-white/10 bg-slate-900/85 shadow-[0_18px_50px_rgba(0,0,0,0.28)] flex flex-col">
+              <div className="flex-1 min-h-0 bg-white overflow-hidden">
                 <img
                   src={selectedExercise.image}
                   alt={selectedExercise.name}
