@@ -101,6 +101,7 @@ export default function AppFlow() {
               {workoutData.map((day) => (
                 <button
                   key={day.dayNumber}
+                  type="button"
                   onClick={() => handleDaySelect(day)}
                   className="w-full flex items-center justify-between p-5 rounded-3xl border border-white/10 bg-slate-900/80 backdrop-blur-sm active:scale-[0.98] transition-all text-left shadow-[0_16px_40px_rgba(0,0,0,0.22)]"
                 >
@@ -129,6 +130,7 @@ export default function AppFlow() {
             className="w-full space-y-5"
           >
             <button
+              type="button"
               onClick={goBack}
               className="inline-flex items-center gap-2 text-slate-400 text-sm px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
             >
@@ -147,6 +149,7 @@ export default function AppFlow() {
 
             <div className="grid grid-cols-1 gap-4">
               <button
+                type="button"
                 onClick={() => handleTypeSelect("warmup")}
                 className="w-full p-7 rounded-4xl bg-linear-to-br from-orange-600 to-orange-400 text-white shadow-[0_20px_50px_rgba(249,115,22,0.25)] active:scale-95 transition-transform text-left"
               >
@@ -158,6 +161,7 @@ export default function AppFlow() {
               </button>
 
               <button
+                type="button"
                 onClick={() => handleTypeSelect("stretch")}
                 className="w-full p-7 rounded-4xl bg-linear-to-br from-blue-600 to-blue-400 text-white shadow-[0_20px_50px_rgba(59,130,246,0.25)] active:scale-95 transition-transform text-left"
               >
@@ -180,6 +184,7 @@ export default function AppFlow() {
             className="w-full space-y-4"
           >
             <button
+              type="button"
               onClick={goBack}
               className="inline-flex items-center gap-2 text-slate-400 text-sm px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
             >
@@ -202,6 +207,7 @@ export default function AppFlow() {
               {getCurrentExerciseList().map((exercise, index) => (
                 <button
                   key={exercise.id}
+                  type="button"
                   onClick={() => handleExerciseSelect(exercise, index)}
                   className="w-full flex items-center gap-4 p-4 rounded-3xl bg-slate-900/80 border border-white/10 active:scale-[0.98] transition-all text-left"
                 >
@@ -245,6 +251,7 @@ export default function AppFlow() {
             className="z-40 flex flex-col"
           >
             <button
+              type="button"
               onClick={goBack}
               className="inline-flex items-center gap-2 text-slate-400 text-xs px-3 py-1.5 rounded-2xl bg-slate-900/50 border border-white/5 self-start mb-2 shrink-0"
             >
@@ -299,6 +306,7 @@ export default function AppFlow() {
                 </div>
 
                 <button
+                  type="button"
                   onClick={handleDoneNext}
                   className="w-full mt-2.5 py-3 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
                 >

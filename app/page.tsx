@@ -1,48 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Dumbbell, Timer, Sparkles, ChevronRight } from "lucide-react";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AppFlow from "@/components/AppFlow";
 import Vo2MaxFlow from "@/components/Vo2MaxFlow";
-import LoginScreen from "@/components/LoginScreen";
-import { Dumbbell, Timer, Sparkles } from "lucide-react";
+import PremiumLoadingScreen from "@/components/PremiumLoadingScreen";
 
-type AppMode = "selection" | "gym" | "vo2";
+type AppMode = "loading" | "menu" | "gym" | "vo2";
 
 export default function Home() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [mode, setMode] = useState<AppMode>("selection");
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [mode, setMode] = useState<AppMode>("loading");
 
   useEffect(() => {
-    const savedAuth = localStorage.getItem("rashi-fit-auth");
-    if (savedAuth === "true") {
-      setIsAuthenticated(true);
-    }
-    setIsCheckingAuth(false);
+    const timer = setTimeout(() => {
+      setMode("menu");
+    }, 2200);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  const handleLoginSuccess = () => {
-    setIsAuthenticated(true);
+  const goToMenu = () => {
+    setMode("menu");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("rashi-fit-auth");
-    setIsAuthenticated(false);
-    setMode("selection");
+  const goToGym = () => {
+    setMode("gym");
   };
 
-  if (isCheckingAuth) {
-    return (
-      <main className="min-h-dvh bg-slate-950 flex items-center justify-center">
-        <p className="text-slate-400">Loading...</p>
-      </main>
-    );
-  }
+  const goToVo2 = () => {
+    setMode("vo2");
+  };
 
-  if (!isAuthenticated) {
-    return <LoginScreen onSuccess={handleLoginSuccess} />;
+  if (mode === "loading") {
+    return <PremiumLoadingScreen />;
   }
 
   return (
@@ -50,70 +44,109 @@ export default function Home() {
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.22),_transparent_38%),radial-gradient(circle_at_center,_rgba(30,41,59,0.35),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.16),_transparent_38%),linear-gradient(to_bottom,_#020617,_#081028,_#020617)] pointer-events-none" />
 
       <div className="relative min-h-dvh flex flex-col">
-        <Navbar showLogout onLogout={handleLogout} />
+        <Navbar />
 
-        <div className="relative flex-grow w-full px-4 py-6">
-          {mode === "selection" && (
-            <div className="w-full space-y-6">
-              <div className="text-center pt-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-400/20 bg-orange-500/10 text-orange-300 text-xs font-semibold mb-4">
-                  <Sparkles size={14} />
+        <div className="relative flex-1 w-full px-4 py-4 min-h-0">
+          {mode === "menu" && (
+            <motion.section
+              key="mode-menu"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="min-h-[calc(100dvh-180px)] flex flex-col justify-center max-w-xl mx-auto"
+            >
+              <div className="text-center mb-7">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-300 text-xs font-bold mb-5">
+                  <Sparkles size={15} />
                   Ready to train
                 </div>
 
-                <h1 className="text-4xl font-black tracking-tight leading-tight">
-                  Choose your
-                  <br />
-                  <span className="text-orange-500">training mode</span>
+                <h1 className="text-4xl font-black tracking-tight leading-[1.05]">
+                  Choose your{" "}
+                  <span className="text-orange-500 block">
+                    training mode
+                  </span>
                 </h1>
 
-                <p className="text-slate-400 text-sm mt-3 max-w-[290px] mx-auto">
-                  Pick your gym routine warmups and stretches, or start a focused
-                  VO₂ max session.
+                <p className="text-slate-400 text-base mt-5 leading-relaxed max-w-sm mx-auto">
+                  Pick your gym routine warmups and stretches, or start a
+                  focused VO₂ max session.
                 </p>
               </div>
 
-              <div className="grid gap-4">
+              <div className="space-y-4">
                 <button
-                  onClick={() => setMode("gym")}
-                  className="w-full p-7 rounded-[2.3rem] border border-white/10 bg-slate-900/80 backdrop-blur-sm active:scale-[0.98] transition-transform text-left shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
+                  type="button"
+                  onClick={goToGym}
+                  className="w-full flex items-center gap-5 p-5 rounded-[2rem] bg-slate-900/80 border border-white/10 shadow-[0_18px_45px_rgba(0,0,0,0.25)] active:scale-[0.98] transition-all text-left"
                 >
-                  <div className="flex items-center gap-5">
-                    <div className="w-16 h-16 rounded-3xl bg-orange-500/10 border border-orange-400/20 flex items-center justify-center shrink-0">
-                      <Dumbbell className="text-orange-500 w-8 h-8" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-black">Gym Routine</h2>
-                      <p className="text-slate-400 text-sm mt-1">
-                        Warmups and stretches for every training day
-                      </p>
-                    </div>
+                  <div className="w-20 h-20 rounded-[1.6rem] bg-orange-500/10 border border-orange-500/20 flex items-center justify-center shrink-0 shadow-[0_0_30px_rgba(249,115,22,0.14)]">
+                    <Dumbbell className="w-10 h-10 text-orange-500" />
                   </div>
+
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-2xl font-black text-white leading-tight">
+                      Gym Routine
+                    </h2>
+                    <p className="text-slate-400 text-sm mt-1 leading-snug">
+                      Warmups and stretches for every training day
+                    </p>
+                  </div>
+
+                  <ChevronRight className="text-slate-500 shrink-0" size={20} />
                 </button>
 
                 <button
-                  onClick={() => setMode("vo2")}
-                  className="w-full p-7 rounded-[2.3rem] border border-white/10 bg-slate-900/80 backdrop-blur-sm active:scale-[0.98] transition-transform text-left shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
+                  type="button"
+                  onClick={goToVo2}
+                  className="w-full flex items-center gap-5 p-5 rounded-[2rem] bg-slate-900/80 border border-white/10 shadow-[0_18px_45px_rgba(0,0,0,0.25)] active:scale-[0.98] transition-all text-left"
                 >
-                  <div className="flex items-center gap-5">
-                    <div className="w-16 h-16 rounded-3xl bg-blue-500/10 border border-blue-400/20 flex items-center justify-center shrink-0">
-                      <Timer className="text-blue-400 w-8 h-8" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-black">VO₂ Max</h2>
-                      <p className="text-slate-400 text-sm mt-1">
-                        Interval training with timer and alerts
-                      </p>
-                    </div>
+                  <div className="w-20 h-20 rounded-[1.6rem] bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 shadow-[0_0_30px_rgba(59,130,246,0.14)]">
+                    <Timer className="w-10 h-10 text-blue-400" />
                   </div>
+
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-2xl font-black text-white leading-tight">
+                      VO₂ Max
+                    </h2>
+                    <p className="text-slate-400 text-sm mt-1 leading-snug">
+                      Interval training with timer and alerts
+                    </p>
+                  </div>
+
+                  <ChevronRight className="text-slate-500 shrink-0" size={20} />
                 </button>
               </div>
+            </motion.section>
+          )}
+
+          {mode === "gym" && (
+            <div className="w-full">
+              <button
+                type="button"
+                onClick={goToMenu}
+                className="mb-4 inline-flex items-center gap-2 text-slate-400 text-sm px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
+              >
+                ← Modes
+              </button>
+
+              <AppFlow />
             </div>
           )}
 
-          {mode === "gym" && <AppFlow />}
+          {mode === "vo2" && (
+            <div className="w-full">
+              <button
+                type="button"
+                onClick={goToMenu}
+                className="mb-4 inline-flex items-center gap-2 text-slate-400 text-sm px-4 py-2 rounded-2xl bg-slate-900/50 border border-white/5"
+              >
+                ← Modes
+              </button>
 
-          {mode === "vo2" && <Vo2MaxFlow />}
+              <Vo2MaxFlow />
+            </div>
+          )}
         </div>
 
         <Footer />
