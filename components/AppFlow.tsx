@@ -23,14 +23,24 @@ export default function AppFlow() {
   );
   const [selectedExerciseIndex, setSelectedExerciseIndex] =
     useState<number>(0);
+  const [completedIndices, setCompletedIndices] = useState<Set<number>>(
+    new Set()
+  );
 
   const goBack = () => {
     if (step === 2) {
       setStep(1);
       setSelectedDay(null);
+      setSelectedType(null);
+      setSelectedExercise(null);
+      setSelectedExerciseIndex(0);
+      setCompletedIndices(new Set());
     } else if (step === 3) {
       setStep(2);
       setSelectedType(null);
+      setSelectedExercise(null);
+      setSelectedExerciseIndex(0);
+      setCompletedIndices(new Set());
     } else if (step === 4) {
       setStep(3);
       setSelectedExercise(null);
@@ -39,11 +49,18 @@ export default function AppFlow() {
 
   const handleDaySelect = (day: WorkoutDay) => {
     setSelectedDay(day);
+    setSelectedType(null);
+    setSelectedExercise(null);
+    setSelectedExerciseIndex(0);
+    setCompletedIndices(new Set());
     setStep(2);
   };
 
   const handleTypeSelect = (type: WorkoutType) => {
     setSelectedType(type);
+    setSelectedExercise(null);
+    setSelectedExerciseIndex(0);
+    setCompletedIndices(new Set());
     setStep(3);
   };
 
@@ -64,6 +81,12 @@ export default function AppFlow() {
   const handleDoneNext = () => {
     const currentList = getCurrentExerciseList();
 
+    setCompletedIndices((prev) => {
+      const next = new Set(prev);
+      next.add(selectedExerciseIndex);
+      return next;
+    });
+
     if (selectedExerciseIndex < currentList.length - 1) {
       const nextIndex = selectedExerciseIndex + 1;
       setSelectedExercise(currentList[nextIndex]);
@@ -73,6 +96,11 @@ export default function AppFlow() {
       setSelectedExercise(null);
     }
   };
+
+  const currentList = getCurrentExerciseList();
+  const completedCount = completedIndices.size;
+  const progressPercent =
+    currentList.length > 0 ? (completedCount / currentList.length) * 100 : 0;
 
   return (
     <div className="w-full pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]">
@@ -151,7 +179,7 @@ export default function AppFlow() {
               <button
                 type="button"
                 onClick={() => handleTypeSelect("warmup")}
-                className="w-full p-7 rounded-4xl bg-linear-to-br from-orange-600 to-orange-400 text-white shadow-[0_20px_50px_rgba(249,115,22,0.25)] active:scale-95 transition-transform text-left"
+                className="w-full p-7 rounded-4xl bg-gradient-to-br from-orange-600 to-orange-400 text-white shadow-[0_20px_50px_rgba(249,115,22,0.25)] active:scale-95 transition-transform text-left"
               >
                 <Flame className="mb-5 w-10 h-10" />
                 <span className="text-3xl font-black block">Warmup</span>
@@ -163,7 +191,7 @@ export default function AppFlow() {
               <button
                 type="button"
                 onClick={() => handleTypeSelect("stretch")}
-                className="w-full p-7 rounded-4xl bg-linear-to-br from-blue-600 to-blue-400 text-white shadow-[0_20px_50px_rgba(59,130,246,0.25)] active:scale-95 transition-transform text-left"
+                className="w-full p-7 rounded-4xl bg-gradient-to-br from-blue-600 to-blue-400 text-white shadow-[0_20px_50px_rgba(59,130,246,0.25)] active:scale-95 transition-transform text-left"
               >
                 <Activity className="mb-5 w-10 h-10" />
                 <span className="text-3xl font-black block">Stretch</span>
@@ -203,34 +231,88 @@ export default function AppFlow() {
               </p>
             </div>
 
+            <div className="rounded-3xl border border-white/10 bg-slate-900/75 p-4 shadow-[0_16px_40px_rgba(0,0,0,0.22)]">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                  Progress
+                </p>
+                <p className="text-xs font-bold text-orange-400">
+                  {completedCount} of {currentList.length} completed
+                </p>
+              </div>
+
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-orange-500 to-emerald-400 transition-all duration-500"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+            </div>
+
             <div className="space-y-3">
-              {getCurrentExerciseList().map((exercise, index) => (
-                <button
-                  key={exercise.id}
-                  type="button"
-                  onClick={() => handleExerciseSelect(exercise, index)}
-                  className="w-full flex items-center gap-4 p-4 rounded-3xl bg-slate-900/80 border border-white/10 active:scale-[0.98] transition-all text-left"
-                >
-                  <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-800 shrink-0 border border-white/10">
-                    <img
-                      src={exercise.image}
-                      alt={exercise.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+              {currentList.map((exercise, index) => {
+                const isCompleted = completedIndices.has(index);
 
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-white text-lg leading-tight">
-                      {exercise.name}
-                    </h4>
-                    <p className="text-orange-400 text-sm font-semibold mt-1">
-                      {exercise.reps_or_time}
-                    </p>
-                  </div>
+                return (
+                  <button
+                    key={exercise.id}
+                    type="button"
+                    onClick={() => handleExerciseSelect(exercise, index)}
+                    className={`w-full flex items-center gap-4 p-4 rounded-3xl border active:scale-[0.98] transition-all text-left ${
+                      isCompleted
+                        ? "bg-emerald-500/10 border-emerald-500/30"
+                        : "bg-slate-900/80 border-white/10"
+                    }`}
+                  >
+                    <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-slate-800 shrink-0 border border-white/10">
+                      <img
+                        src={exercise.image}
+                        alt={exercise.name}
+                        className={`w-full h-full object-cover transition-all duration-300 ${
+                          isCompleted ? "opacity-55" : "opacity-100"
+                        }`}
+                      />
 
-                  <ChevronRight className="text-slate-500 shrink-0" size={18} />
-                </button>
-              ))}
+                      {isCompleted && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-emerald-950/45 backdrop-blur-[1px]">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-400 text-slate-950 shadow-[0_0_18px_rgba(52,211,153,0.45)]">
+                            <CheckCircle2 size={18} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <h4
+                        className={`font-bold text-lg leading-tight ${
+                          isCompleted ? "text-emerald-300" : "text-white"
+                        }`}
+                      >
+                        {exercise.name}
+                      </h4>
+                      <p
+                        className={`text-sm font-semibold mt-1 ${
+                          isCompleted ? "text-emerald-400" : "text-orange-400"
+                        }`}
+                      >
+                        {exercise.reps_or_time}
+                      </p>
+                    </div>
+
+                    {isCompleted ? (
+                      <CheckCircle2
+                        className="text-emerald-400 shrink-0"
+                        size={20}
+                      />
+                    ) : (
+                      <ChevronRight
+                        className="text-slate-500 shrink-0"
+                        size={18}
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </motion.div>
         )}
@@ -274,7 +356,7 @@ export default function AppFlow() {
 
                 <p className="text-slate-400 text-xs mb-1">
                   Exercise {selectedExerciseIndex + 1} of{" "}
-                  {getCurrentExerciseList().length}
+                  {currentList.length}
                 </p>
 
                 <h2 className="text-[24px] font-black mb-1 leading-[1.05] line-clamp-2">
@@ -311,7 +393,7 @@ export default function AppFlow() {
                   className="w-full mt-2.5 py-3 rounded-2xl bg-white text-black font-black flex items-center justify-center gap-2 active:scale-95 transition-transform"
                 >
                   <CheckCircle2 size={18} />
-                  {selectedExerciseIndex < getCurrentExerciseList().length - 1
+                  {selectedExerciseIndex < currentList.length - 1
                     ? "Next Exercise"
                     : "Done"}
                 </button>
