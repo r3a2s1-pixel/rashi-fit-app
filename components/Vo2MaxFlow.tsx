@@ -19,31 +19,21 @@ type NavigatorWithWakeLock = Navigator & {
   };
 };
 
-// ─── Phase theme system ──────────────────────────────────────────────────────
-
 interface PhaseTheme {
-  /** Outer wrapper: border + background gradient on the main phase card */
   cardBorder: string;
-  cardBg: string;
-  /** Coloured glow shadow on the main phase card */
   cardShadow: string;
-  /** Phase name text colour */
   nameColor: string;
-  /** Status label ("Running" / "Ready") colour */
   statusColor: string;
-  /** Timer digit glow/colour */
   timerColor: string;
-  /** Total-remaining banner: solid bg + shadow */
   bannerBg: string;
   bannerShadow: string;
   bannerText: string;
+  screenBg: string;
 }
 
 const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
   warm: {
     cardBorder: "border-amber-500/70",
-    cardBg:
-      "bg-[radial-gradient(ellipse_at_top,_rgba(251,191,36,0.18),_transparent_65%),_rgba(15,23,42,0.85)]",
     cardShadow:
       "shadow-[0_0_0_1px_rgba(251,191,36,0.15),_0_20px_60px_rgba(251,191,36,0.22)]",
     nameColor: "text-amber-300",
@@ -52,11 +42,11 @@ const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
     bannerBg: "bg-gradient-to-r from-amber-600 to-orange-500",
     bannerShadow: "shadow-[0_12px_40px_rgba(245,158,11,0.40)]",
     bannerText: "text-amber-50",
+    screenBg:
+      "bg-[radial-gradient(circle_at_top,_rgba(251,191,36,0.45),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(249,115,22,0.32),_transparent_45%),linear-gradient(to_bottom,_rgba(69,26,3,0.72),_rgba(15,23,42,0.96))]",
   },
   run: {
     cardBorder: "border-emerald-500/70",
-    cardBg:
-      "bg-[radial-gradient(ellipse_at_top,_rgba(16,185,129,0.20),_transparent_65%),_rgba(15,23,42,0.85)]",
     cardShadow:
       "shadow-[0_0_0_1px_rgba(16,185,129,0.18),_0_20px_60px_rgba(16,185,129,0.28)]",
     nameColor: "text-emerald-300",
@@ -65,11 +55,11 @@ const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
     bannerBg: "bg-gradient-to-r from-emerald-600 to-teal-500",
     bannerShadow: "shadow-[0_12px_40px_rgba(16,185,129,0.40)]",
     bannerText: "text-emerald-50",
+    screenBg:
+      "bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.48),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(20,184,166,0.34),_transparent_45%),linear-gradient(to_bottom,_rgba(6,78,59,0.74),_rgba(15,23,42,0.96))]",
   },
   recovery: {
     cardBorder: "border-cyan-500/70",
-    cardBg:
-      "bg-[radial-gradient(ellipse_at_top,_rgba(6,182,212,0.18),_transparent_65%),_rgba(15,23,42,0.85)]",
     cardShadow:
       "shadow-[0_0_0_1px_rgba(6,182,212,0.15),_0_20px_60px_rgba(6,182,212,0.24)]",
     nameColor: "text-cyan-300",
@@ -78,11 +68,11 @@ const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
     bannerBg: "bg-gradient-to-r from-blue-600 to-cyan-500",
     bannerShadow: "shadow-[0_12px_40px_rgba(6,182,212,0.38)]",
     bannerText: "text-cyan-50",
+    screenBg:
+      "bg-[radial-gradient(circle_at_top,_rgba(6,182,212,0.48),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.34),_transparent_45%),linear-gradient(to_bottom,_rgba(8,47,73,0.74),_rgba(15,23,42,0.96))]",
   },
   cool: {
     cardBorder: "border-violet-500/70",
-    cardBg:
-      "bg-[radial-gradient(ellipse_at_top,_rgba(139,92,246,0.18),_transparent_65%),_rgba(15,23,42,0.85)]",
     cardShadow:
       "shadow-[0_0_0_1px_rgba(139,92,246,0.15),_0_20px_60px_rgba(139,92,246,0.26)]",
     nameColor: "text-violet-300",
@@ -91,18 +81,20 @@ const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
     bannerBg: "bg-gradient-to-r from-violet-600 to-purple-500",
     bannerShadow: "shadow-[0_12px_40px_rgba(139,92,246,0.38)]",
     bannerText: "text-violet-50",
+    screenBg:
+      "bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.48),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(168,85,247,0.34),_transparent_45%),linear-gradient(to_bottom,_rgba(76,29,149,0.74),_rgba(15,23,42,0.96))]",
   },
 };
 
 function getTheme(phaseName: string): PhaseTheme {
   const n = phaseName.toLowerCase();
+
   if (n.includes("warm")) return THEMES.warm;
   if (n.includes("run")) return THEMES.run;
   if (n.includes("recovery")) return THEMES.recovery;
-  return THEMES.cool; // Cool Down + fallback
-}
 
-// ─────────────────────────────────────────────────────────────────────────────
+  return THEMES.cool;
+}
 
 export default function Vo2MaxFlow() {
   const [screen, setScreen] = useState<"setup" | "dash">("setup");
@@ -298,24 +290,25 @@ export default function Vo2MaxFlow() {
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
+
     return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
   const getTotalRemaining = () => {
     let total = timeLeft;
+
     for (let i = currentIndex + 1; i < phases.length; i++) {
       total += phases[i].duration * 60;
     }
+
     return formatTime(total);
   };
 
-  // Derive the current theme once so every styled element reads from it
   const theme = getTheme(phases[currentIndex]?.name ?? "");
 
   return (
-    <div className="w-full pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]">
+    <div className="relative w-full pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]">
       {screen === "setup" ? (
-        /* ── Setup screen — unchanged styling ─────────────────────────────── */
         <div className="w-full max-w-xl mx-auto space-y-4">
           <div className="rounded-[2rem] border border-white/10 bg-slate-900/75 backdrop-blur-md p-6 shadow-[0_18px_50px_rgba(0,0,0,0.32)]">
             <p className="text-orange-400 text-xs font-semibold uppercase tracking-[0.2em] mb-2">
@@ -383,108 +376,115 @@ export default function Vo2MaxFlow() {
           </div>
         </div>
       ) : (
-        /* ── Dashboard screen — phase-reactive styling ─────────────────────── */
-        <div className="w-full max-w-xl mx-auto space-y-4">
-
-          {/* Total remaining banner — tinted to phase colour */}
-          <div
-            className={`
-              rounded-[2rem] p-6 text-center
-              transition-all duration-500
-              ${theme.bannerBg} ${theme.bannerShadow}
-            `}
-          >
-            <p className={`text-xs uppercase font-bold tracking-[0.2em] mb-2 ${theme.bannerText} opacity-75`}>
-              Total Remaining
-            </p>
-            <p className={`text-5xl font-black ${theme.bannerText}`}>
-              {getTotalRemaining()}
-            </p>
-          </div>
-
-          {/* Main phase card */}
-          <div
-            className={`
-              rounded-[2rem] border-2 p-7 text-center backdrop-blur-sm
-              transition-all duration-500
-              ${theme.cardBorder} ${theme.cardBg} ${theme.cardShadow}
-            `}
-          >
-            {/* Status label */}
-            <p className={`text-xs uppercase tracking-[0.25em] font-bold mb-3 transition-colors duration-500 ${theme.statusColor}`}>
-              {isActive ? "Running" : "Ready"}
-            </p>
-
-            {/* Phase name */}
-            <h2 className={`text-4xl font-black mb-2 transition-colors duration-500 ${theme.nameColor}`}>
-              {phases[currentIndex]?.name}
-            </h2>
-
-            {/* Speed */}
-            <p className="text-lg text-slate-300 mb-6">
-              {phases[currentIndex]?.speed}
-            </p>
-
-            {/* Timer */}
-            <p className={`text-7xl font-black tracking-tight transition-colors duration-500 ${theme.timerColor}`}>
-              {formatTime(timeLeft)}
-            </p>
-          </div>
-
-          {/* Up Next card — unchanged styling */}
-          <div className="rounded-[2rem] border border-white/10 bg-slate-900/75 backdrop-blur-md p-5 shadow-[0_18px_50px_rgba(0,0,0,0.28)]">
-            <p className="text-xs uppercase tracking-[0.2em] font-bold text-slate-500 mb-3">
-              Up Next
-            </p>
-
-            {phases[currentIndex + 1] ? (
-              <div className="flex items-center justify-between gap-4">
-                <p className="text-2xl font-black">
-                  {phases[currentIndex + 1].name}
-                </p>
-
-                <p className="text-slate-400 text-right text-sm">
-                  {phases[currentIndex + 1].duration} min •{" "}
-                  {phases[currentIndex + 1].speed}
-                </p>
-              </div>
-            ) : (
-              <p className="text-emerald-400 font-bold text-lg">Finish 🎉</p>
-            )}
-          </div>
-
-          {/* Controls — unchanged */}
-          <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={toggleTimer}
-              className="flex-1 py-5 rounded-[2rem] bg-white text-black font-black text-xl flex justify-center items-center gap-3 active:scale-95 transition-transform"
+        <div
+          className={`
+            -mx-4 px-4 py-4 min-h-[calc(100dvh-180px)] rounded-[2rem]
+            transition-all duration-700
+            ${theme.screenBg}
+          `}
+        >
+          <div className="relative z-10 w-full max-w-xl mx-auto space-y-4">
+            <div
+              className={`
+                rounded-[2rem] p-6 text-center
+                transition-all duration-500
+                ${theme.bannerBg} ${theme.bannerShadow}
+              `}
             >
-              {isActive ? (
-                <>
-                  <Pause size={24} />
-                  Pause
-                </>
+              <p
+                className={`text-xs uppercase font-bold tracking-[0.2em] mb-2 ${theme.bannerText} opacity-75`}
+              >
+                Total Remaining
+              </p>
+
+              <p className={`text-5xl font-black ${theme.bannerText}`}>
+                {getTotalRemaining()}
+              </p>
+            </div>
+
+            <div
+              className={`
+                rounded-[2rem] border-2 p-7 text-center backdrop-blur-md
+                bg-slate-900/75
+                transition-all duration-500
+                ${theme.cardBorder} ${theme.cardShadow}
+              `}
+            >
+              <p
+                className={`text-xs uppercase tracking-[0.25em] font-bold mb-3 transition-colors duration-500 ${theme.statusColor}`}
+              >
+                {isActive ? "Running" : "Ready"}
+              </p>
+
+              <h2
+                className={`text-4xl font-black mb-2 transition-colors duration-500 ${theme.nameColor}`}
+              >
+                {phases[currentIndex]?.name}
+              </h2>
+
+              <p className="text-lg text-slate-300 mb-6">
+                {phases[currentIndex]?.speed}
+              </p>
+
+              <p
+                className={`text-7xl font-black tracking-tight transition-colors duration-500 ${theme.timerColor}`}
+              >
+                {formatTime(timeLeft)}
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] border border-white/10 bg-slate-900/75 backdrop-blur-md p-5 shadow-[0_18px_50px_rgba(0,0,0,0.28)]">
+              <p className="text-xs uppercase tracking-[0.2em] font-bold text-slate-500 mb-3">
+                Up Next
+              </p>
+
+              {phases[currentIndex + 1] ? (
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-2xl font-black">
+                    {phases[currentIndex + 1].name}
+                  </p>
+
+                  <p className="text-slate-400 text-right text-sm">
+                    {phases[currentIndex + 1].duration} min •{" "}
+                    {phases[currentIndex + 1].speed}
+                  </p>
+                </div>
               ) : (
-                <>
-                  <Play size={24} />
-                  Start
-                </>
+                <p className="text-emerald-400 font-bold text-lg">Finish 🎉</p>
               )}
-            </button>
+            </div>
 
-            <button
-              type="button"
-              onClick={resetTimer}
-              className="px-5 rounded-[2rem] bg-slate-800 text-white border border-white/10 active:scale-95 transition-transform flex items-center justify-center"
-            >
-              <RotateCcw size={24} />
-            </button>
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={toggleTimer}
+                className="flex-1 py-5 rounded-[2rem] bg-white text-black font-black text-xl flex justify-center items-center gap-3 active:scale-95 transition-transform"
+              >
+                {isActive ? (
+                  <>
+                    <Pause size={24} />
+                    Pause
+                  </>
+                ) : (
+                  <>
+                    <Play size={24} />
+                    Start
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={resetTimer}
+                className="px-5 rounded-[2rem] bg-slate-800 text-white border border-white/10 active:scale-95 transition-transform flex items-center justify-center"
+              >
+                <RotateCcw size={24} />
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Reset confirmation modal — unchanged */}
       {showResetConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-md">
           <div className="w-full max-w-sm rounded-[2rem] border border-white/10 bg-slate-950/95 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.65)]">
