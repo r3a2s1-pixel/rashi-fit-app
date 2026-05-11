@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import NoSleep from "nosleep.js";
 import { Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
 
 interface Phase {
@@ -25,10 +26,13 @@ interface PhaseTheme {
   nameColor: string;
   statusColor: string;
   timerColor: string;
+  barFill: string;
   bannerBg: string;
   bannerShadow: string;
   bannerText: string;
   screenBg: string;
+  pipActive: string;
+  upNextBorder: string;
 }
 
 const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
@@ -39,11 +43,14 @@ const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
     nameColor: "text-amber-300",
     statusColor: "text-amber-400/80",
     timerColor: "text-amber-100",
+    barFill: "bg-gradient-to-r from-amber-500 to-orange-400",
     bannerBg: "bg-gradient-to-r from-amber-600 to-orange-500",
     bannerShadow: "shadow-[0_12px_40px_rgba(245,158,11,0.40)]",
     bannerText: "text-amber-50",
     screenBg:
-      "bg-[radial-gradient(circle_at_top,_rgba(251,191,36,0.45),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(249,115,22,0.32),_transparent_45%),linear-gradient(to_bottom,_rgba(69,26,3,0.72),_rgba(15,23,42,0.96))]",
+      "bg-[radial-gradient(circle_at_top,_rgba(251,191,36,0.48),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(249,115,22,0.35),_transparent_45%),linear-gradient(to_bottom,_#451a03,_#0f172a)]",
+    pipActive: "bg-amber-400",
+    upNextBorder: "border-l-amber-500/50",
   },
   run: {
     cardBorder: "border-emerald-500/70",
@@ -52,11 +59,14 @@ const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
     nameColor: "text-emerald-300",
     statusColor: "text-emerald-400/80",
     timerColor: "text-emerald-100",
+    barFill: "bg-gradient-to-r from-emerald-500 to-teal-400",
     bannerBg: "bg-gradient-to-r from-emerald-600 to-teal-500",
     bannerShadow: "shadow-[0_12px_40px_rgba(16,185,129,0.40)]",
     bannerText: "text-emerald-50",
     screenBg:
-      "bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.48),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(20,184,166,0.34),_transparent_45%),linear-gradient(to_bottom,_rgba(6,78,59,0.74),_rgba(15,23,42,0.96))]",
+      "bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.50),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(20,184,166,0.36),_transparent_45%),linear-gradient(to_bottom,_#064e3b,_#0f172a)]",
+    pipActive: "bg-emerald-400",
+    upNextBorder: "border-l-emerald-500/50",
   },
   recovery: {
     cardBorder: "border-cyan-500/70",
@@ -65,11 +75,14 @@ const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
     nameColor: "text-cyan-300",
     statusColor: "text-cyan-400/80",
     timerColor: "text-cyan-100",
+    barFill: "bg-gradient-to-r from-blue-500 to-cyan-400",
     bannerBg: "bg-gradient-to-r from-blue-600 to-cyan-500",
     bannerShadow: "shadow-[0_12px_40px_rgba(6,182,212,0.38)]",
     bannerText: "text-cyan-50",
     screenBg:
-      "bg-[radial-gradient(circle_at_top,_rgba(6,182,212,0.48),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.34),_transparent_45%),linear-gradient(to_bottom,_rgba(8,47,73,0.74),_rgba(15,23,42,0.96))]",
+      "bg-[radial-gradient(circle_at_top,_rgba(6,182,212,0.50),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.36),_transparent_45%),linear-gradient(to_bottom,_#082f49,_#0f172a)]",
+    pipActive: "bg-cyan-400",
+    upNextBorder: "border-l-cyan-500/50",
   },
   cool: {
     cardBorder: "border-violet-500/70",
@@ -78,11 +91,14 @@ const THEMES: Record<"warm" | "run" | "recovery" | "cool", PhaseTheme> = {
     nameColor: "text-violet-300",
     statusColor: "text-violet-400/80",
     timerColor: "text-violet-100",
+    barFill: "bg-gradient-to-r from-violet-500 to-purple-400",
     bannerBg: "bg-gradient-to-r from-violet-600 to-purple-500",
     bannerShadow: "shadow-[0_12px_40px_rgba(139,92,246,0.38)]",
     bannerText: "text-violet-50",
     screenBg:
-      "bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.48),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(168,85,247,0.34),_transparent_45%),linear-gradient(to_bottom,_rgba(76,29,149,0.74),_rgba(15,23,42,0.96))]",
+      "bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.50),_transparent_42%),radial-gradient(circle_at_bottom,_rgba(168,85,247,0.36),_transparent_45%),linear-gradient(to_bottom,_#4c1d95,_#0f172a)]",
+    pipActive: "bg-violet-400",
+    upNextBorder: "border-l-violet-500/50",
   },
 };
 
@@ -108,8 +124,20 @@ export default function Vo2MaxFlow() {
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const wakeLockRef = useRef<ScreenWakeLockSentinel | null>(null);
+  const noSleepRef = useRef<NoSleep | null>(null);
 
   const requestWakeLock = async () => {
+    try {
+      if (!noSleepRef.current) {
+        noSleepRef.current = new NoSleep();
+      }
+
+      noSleepRef.current.enable();
+      console.log("NoSleep fallback enabled");
+    } catch (error) {
+      console.error("NoSleep fallback failed:", error);
+    }
+
     try {
       const nav = navigator as NavigatorWithWakeLock;
 
@@ -136,6 +164,15 @@ export default function Vo2MaxFlow() {
       }
     } catch (error) {
       console.error("Wake lock release failed:", error);
+    }
+
+    try {
+      if (noSleepRef.current) {
+        noSleepRef.current.disable();
+        console.log("NoSleep fallback released");
+      }
+    } catch (error) {
+      console.error("NoSleep release failed:", error);
     }
   };
 
@@ -306,6 +343,19 @@ export default function Vo2MaxFlow() {
 
   const theme = getTheme(phases[currentIndex]?.name ?? "");
 
+  const phaseDurationSecs = (phases[currentIndex]?.duration ?? 0) * 60;
+  const phaseProgress =
+    phaseDurationSecs > 0
+      ? Math.min(
+          100,
+          ((phaseDurationSecs - timeLeft) / phaseDurationSecs) * 100
+        )
+      : 0;
+
+  const nextPhaseTheme = phases[currentIndex + 1]
+    ? getTheme(phases[currentIndex + 1].name)
+    : null;
+
   return (
     <div className="relative w-full pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]">
       {screen === "setup" ? (
@@ -378,12 +428,14 @@ export default function Vo2MaxFlow() {
       ) : (
         <div
           className={`
-            -mx-4 px-4 py-4 min-h-[calc(100dvh-180px)] rounded-[2rem]
+            fixed inset-0 z-[999999] overflow-y-auto
+            px-4 pt-[max(1rem,env(safe-area-inset-top,1rem))]
+            pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))]
             transition-all duration-700
             ${theme.screenBg}
           `}
         >
-          <div className="relative z-10 w-full max-w-xl mx-auto space-y-4">
+          <div className="w-full max-w-xl mx-auto space-y-4 min-h-full flex flex-col justify-center">
             <div
               className={`
                 rounded-[2rem] p-6 text-center
@@ -405,7 +457,7 @@ export default function Vo2MaxFlow() {
             <div
               className={`
                 rounded-[2rem] border-2 p-7 text-center backdrop-blur-md
-                bg-slate-900/75
+                bg-slate-900
                 transition-all duration-500
                 ${theme.cardBorder} ${theme.cardShadow}
               `}
@@ -431,16 +483,39 @@ export default function Vo2MaxFlow() {
               >
                 {formatTime(timeLeft)}
               </p>
+
+              <div className="mt-6 w-full h-1 rounded-full bg-white/10 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-1000 ease-linear ${theme.barFill}`}
+                  style={{ width: `${phaseProgress}%` }}
+                />
+              </div>
             </div>
 
-            <div className="rounded-[2rem] border border-white/10 bg-slate-900/75 backdrop-blur-md p-5 shadow-[0_18px_50px_rgba(0,0,0,0.28)]">
+            <div
+              className={`
+                rounded-[2rem] border border-white/10 border-l-4
+                bg-slate-900 backdrop-blur-md p-5
+                shadow-[0_18px_50px_rgba(0,0,0,0.28)]
+                transition-all duration-500
+                ${
+                  nextPhaseTheme
+                    ? nextPhaseTheme.upNextBorder
+                    : "border-l-white/10"
+                }
+              `}
+            >
               <p className="text-xs uppercase tracking-[0.2em] font-bold text-slate-500 mb-3">
                 Up Next
               </p>
 
               {phases[currentIndex + 1] ? (
                 <div className="flex items-center justify-between gap-4">
-                  <p className="text-2xl font-black">
+                  <p
+                    className={`text-2xl font-black transition-colors duration-500 ${
+                      nextPhaseTheme ? nextPhaseTheme.nameColor : "text-white"
+                    }`}
+                  >
                     {phases[currentIndex + 1].name}
                   </p>
 
@@ -453,6 +528,35 @@ export default function Vo2MaxFlow() {
                 <p className="text-emerald-400 font-bold text-lg">Finish 🎉</p>
               )}
             </div>
+
+            {phases.length > 0 && (
+              <div className="flex items-center justify-center gap-1.5 py-1">
+                {phases.map((p, i) => {
+                  const pipTheme = getTheme(p.name);
+                  const isCompleted = i < currentIndex;
+                  const isCurrent = i === currentIndex;
+                  const isUpcoming = i > currentIndex;
+
+                  return (
+                    <div
+                      key={i}
+                      className={`
+                        rounded-full transition-all duration-500
+                        ${
+                          isCurrent
+                            ? `w-5 h-2 ${pipTheme.pipActive} shadow-[0_0_6px_rgba(255,255,255,0.25)]`
+                            : isCompleted
+                            ? "w-2 h-2 bg-white/35"
+                            : isUpcoming
+                            ? "w-2 h-2 bg-white/15"
+                            : "w-2 h-2 bg-white/15"
+                        }
+                      `}
+                    />
+                  );
+                })}
+              </div>
+            )}
 
             <div className="flex gap-3 pt-2">
               <button
@@ -486,7 +590,7 @@ export default function Vo2MaxFlow() {
       )}
 
       {showResetConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-md">
+        <div className="fixed inset-0 z-[1000000] flex items-center justify-center px-4 bg-black/70 backdrop-blur-md">
           <div className="w-full max-w-sm rounded-[2rem] border border-white/10 bg-slate-950/95 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.65)]">
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl border border-orange-500/30 bg-orange-500/10 shadow-[0_0_35px_rgba(249,115,22,0.18)]">
               <RotateCcw className="h-8 w-8 text-orange-400" />
